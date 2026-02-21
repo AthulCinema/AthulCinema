@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <link rel="manifest" href="/NearBlood/manifest.json">
+
+<meta name="theme-color" content="#1b1c22">
+
+<link rel="apple-touch-icon" href="/NearBlood/icons/icon-192.png">
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>AthulCinema - Premium Edition</title>
+   <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const splash = document.getElementById("splash-screen");
+
+  if (!splash) return;
+
+  // Desktop → remove instantly
+  if (window.innerWidth > 1024) {
+    splash.style.display = "none";
+    return;
+  }
+
+  // Mobile → show animation then remove
+  setTimeout(function () {
+    splash.style.transition = "opacity 0.5s";
+    splash.style.opacity = "0";
+
+    setTimeout(function () {
+      splash.style.display = "none";
+    }, 500);
+
+  }, 1200);
+
+});
+</script>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="splash-screen">
+    <img src="3.png" id="splash-logo">
+  </div>
+<nav class="navbar">
+    <div class="logo">
+        <img src="1.png"  class="logo-img"> 
+       AthulCinema
+    </div>
+    <div class="nav-actions">
+       <button class="theme-btn" onclick="startEmojiGame()" title="Emoji Decoder Game"><i class="ri-gamepad-line"></i></button>
+       <button class="theme-btn" onclick="startTrivia()" title="Play Trivia"><i class="ri-question-mark"></i></button>
+       <button class="theme-btn" onclick="openRoulette()" title="Movie Roulette"><i class="ri-focus-3-line"></i></button>
+       
+       <button class="theme-btn" onclick="startFrameGame()" title="Frame by Frame Game"><i class="ri-image-edit-line"></i></button>
+       <button class="theme-btn" onclick="startSixDegrees()" title="Six Degrees of Cinema"><i class="ri-route-line"></i></button>
+    </div>
+
+    
+  </nav>
+
+  <div class="hero-carousel" id="hero-carousel">
+    <div class="hero-overlay"></div>
+  </div>
+
+  <div class="mood-wrapper">
+    <h2 id="dynamic-greeting" class="section-header-text">What's your vibe today?</h2>
+    <div class="mood-grid">
+      <button class="mood-card" onclick="setMood('happy', this)"><div class="icon-box"><i class="ri-emotion-laugh-line"></i></div><span>Laugh</span></button>
+      <button class="mood-card" onclick="setMood('adrenaline', this)"><div class="icon-box"><i class="ri-fire-fill"></i></div><span>Pumped</span></button>
+      <button class="mood-card" onclick="setMood('scared', this)"><div class="icon-box"><i class="ri-ghost-line"></i></div><span>Scared</span></button>
+      <button class="mood-card" onclick="setMood('romantic', this)"><div class="icon-box"><i class="ri-hearts-fill"></i></div><span>Romantic</span></button>
+      <button class="mood-card" onclick="setMood('smart', this)"><div class="icon-box"><i class="ri-lightbulb-flash-line"></i></div><span>Curious</span></button>
+      <button class="mood-card" onclick="setMood('drama', this)"><div class="icon-box"><i class="ri-cup-line"></i></div><span>Chill</span></button>
+    </div>
+  </div>
+
+  <div class="controls-container" id="main-controls">
+    <div class="controls-wrapper">
+      
+      <div class="search-box">
+        <i class="ri-search-line search-icon"></i>
+        <input type="text" id="search" placeholder="Search movies, characters, or try 'matrix'..." autocomplete="off">
+        <div id="live-search-results" class="search-dropdown"></div>
+      </div>
+      
+      <div class="custom-select-wrapper">
+        <div class="custom-select" onclick="toggleDropdown('genre-options', this)"><span id="selected-genre-text">Genres</span><i class="ri-arrow-down-s-line"></i></div>
+        <div id="genre-options" class="select-options">
+          <div class="option" onclick="resetFilters()">All Genres (Reset)</div>
+          <div class="option" onclick="event.stopPropagation(); toggleGenre('28', 'Action', this)">Action</div>
+          <div class="option" onclick="event.stopPropagation(); toggleGenre('35', 'Comedy', this)">Comedy</div>
+          <div class="option" onclick="event.stopPropagation(); toggleGenre('27', 'Horror', this)">Horror</div>
+          <div class="option" onclick="event.stopPropagation(); toggleGenre('10749', 'Romance', this)">Romance</div>
+          <div class="option" onclick="event.stopPropagation(); toggleGenre('878', 'Sci-Fi', this)">Sci-Fi</div>
+        </div>
+      </div>
+
+      <div class="custom-select-wrapper">
+        <div class="custom-select" onclick="toggleDropdown('lang-options', this)"><span id="selected-lang-text">Language</span><i class="ri-arrow-down-s-line"></i></div>
+        <div id="lang-options" class="select-options">
+          <div class="option" onclick="selectOption('lang', '', 'All Languages')">All Languages</div>
+          <div class="option" onclick="selectOption('lang', 'en', 'English')">English</div>
+          <div class="option" onclick="selectOption('lang', 'hi', 'Hindi')">Hindi</div>
+          <div class="option" onclick="selectOption('lang', 'ml', 'Malayalam')">Malayalam</div>
+          <div class="option" onclick="selectOption('lang', 'ta', 'Tamil')">Tamil</div>
+        </div>
+      </div>
+
+      <div class="custom-select-wrapper">
+        <div class="custom-select" onclick="toggleDropdown('sort-options', this)"><span id="selected-sort-text">Sort By</span><i class="ri-arrow-down-s-line"></i></div>
+        <div id="sort-options" class="select-options">
+          <div class="option" onclick="selectOption('sort', 'popularity.desc', 'Most Popular')">Most Popular</div>
+          <div class="option" onclick="selectOption('sort', 'vote_average.desc', 'Top Rated')">Top Rated</div>
+          <div class="option" onclick="selectOption('sort', 'primary_release_date.desc', 'Newest')">Newest</div>
+        </div>
+      </div>
+
+      <div class="custom-select-wrapper" style="flex: 0 1 80px;">
+         <input type="number" id="year-input" placeholder="Year" min="1900" max="2030" style="width:100%; padding:0.7rem; border-radius:50px; border:1px solid var(--border); background:var(--card-bg); color:var(--text); outline:none;" onchange="selectOption('year', this.value, this.value)">
+      </div>
+
+      <div class="provider-filter-group">
+  <button class="provider-btn" onclick="toggleProvider('8', this)" title="Netflix">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Netflix_icon.svg/500px-Netflix_icon.svg.png?20220806170125" alt="Netflix">
+  </button>
+  <button class="provider-btn" onclick="toggleProvider('119', this)" title="Prime Video">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Amazon_Prime_Video_logo_%282024%29.svg/960px-Amazon_Prime_Video_logo_%282024%29.svg.png"class="" alt="Prime">
+  </button>
+  <button class="provider-btn" onclick="toggleProvider('122', this)" title="Hotstar">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQd92pajfK0f73EkPShVvJXSw14vBNq4cXVzEw8Vz5wIg&s=10" alt="Hotstar">
+  </button>
+</div>
+
+
+      <button class="theme-btn icon-only" onclick="resetFilters()" title="Reset Filters"><i class="ri-refresh-line"></i></button>
+      <button class="theme-btn icon-only" onclick="toggleTheme()" id="theme-icon-btn"><i class="ri-moon-line"></i></button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="setTab('trending', this)"><i class="ri-fire-fill"></i> Trending</button>
+    <button class="tab-btn" onclick="setTab('swipe', this)"><i class="ri-t-shirt-2-fill"></i> Swipe Mode</button>
+    <button class="tab-btn" onclick="setTab('favorites', this)"><i class="ri-heart-3-fill"></i> Watchlist</button>
+    <button class="tab-btn" onclick="setTab('upcoming', this)"><i class="ri-calendar-event-fill"></i> Upcoming</button>
+    <button class="tab-btn" id="profile-tab-btn" onclick="setTab('profile', this)"><i class="ri-user-3-fill"></i> Profile</button>
+  </div>
+
+  <div id="grid" class="movies-grid"></div>
+
+  <div id="swipe-view" style="display:none; height: 60vh; align-items:center; justify-content:center; flex-direction: column;">
+    <div id="swipe-card-container" class="swipe-card-stack"></div>
+    <div class="swipe-controls">
+        <button onclick="handleSwipe('left')" class="swipe-btn no"><i class="ri-close-fill"></i></button>
+        <button onclick="handleSwipe('right')" class="swipe-btn yes"><i class="ri-heart-fill"></i></button>
+    </div>
+  </div>
+
+  <div id="profile-view" class="profile-container" style="display:none;">
+    <div class="profile-header-card">
+      <div class="profile-avatar-wrapper"><img id="profile-pic" src="https://ui-avatars.com/api/?name=Guest+User&background=random" alt="Profile"></div>
+      <div class="profile-info-display" style="flex:1;">
+        <h2 id="profile-name">Guest User</h2>
+        <div class="profile-stats"><span><strong id="stat-watched">0</strong> Watched</span></div>
+      </div>
+      <button class="btn-primary" onclick="generateWrapped()"><i class="ri-magic-line"></i> Cinema Wrapped</button>
+    </div>
+    
+    <div class="stats-container">
+      <h3><i class="ri-bar-chart-fill"></i> Your Movie DNA</h3>
+      <div class="stats-grid">
+        <div class="stat-box"><span class="stat-label">Total Time</span><span class="stat-value" id="stat-total-runtime">0h</span></div>
+        <div class="stat-box"><span class="stat-label">Avg Rating</span><span class="stat-value" id="stat-avg-rating">-</span></div>
+      </div>
+    </div>
+
+    <div class="stats-container">
+      <h3><i class="ri-trophy-fill"></i> Cinema Pass Achievements</h3>
+      <div id="badge-grid" class="badge-grid"></div>
+    </div>
+
+    <div class="history-section">
+        <div class="section-header"><h3><i class="ri-disc-line"></i> My Mixtapes</h3><button onclick="createMixtape()" class="text-btn">+ New</button></div>
+        <div id="mixtape-list" class="horizontal-scroll-grid"></div>
+    </div>
+    
+    <div class="history-section">
+      <div class="section-header"><h3><i class="ri-history-line"></i> Watch History</h3><button onclick="clearHistory('watch')" class="text-btn">Clear</button></div>
+      <div id="watch-history-grid" class="horizontal-scroll-grid"></div>
+    </div>
+  </div>
+
+  <div id="movieModal" class="modal" onclick="closeModal(event, 'movieModal')">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeVideoModal()"><i class="ri-close-line"></i></button>
+      <div class="media-wrapper">
+        <div id="m-hero" class="hero-banner"></div>
+        <div id="m-video-container" class="video-container" style="display:none;"><button id="close-trailer-btn" onclick="stopTrailer()"><i class="ri-arrow-left-line"></i> Back</button><iframe id="m-video-player" width="100%" height="100%" frameborder="0" allow="autoplay" allowfullscreen></iframe></div>
+      </div>
+      <div class="modal-body">
+        <h2 id="m-title" class="modal-title"></h2>
+        <p id="m-tagline" class="modal-tagline"></p> 
+        <div id="m-keywords" class="keyword-container"></div>
+        <div class="action-row">
+          <button id="m-trailer-btn" class="btn-primary" onclick="playBestTrailer()"><i class="ri-play-circle-fill"></i> Trailer</button>
+          <button class="btn-primary" onclick="openBookingModal()"><i class="ri-ticket-2-fill"></i> Get Tickets</button>
+          <button id="m-fav" onclick="toggleFav()" class="btn-secondary"><i class="ri-heart-add-line" id="m-fav-icon"></i> <span id="m-fav-text">Add</span></button>
+          <button onclick="addToMixtapeCurrent()" class="btn-secondary"><i class="ri-add-circle-line"></i> List</button>
+        </div>
+        
+        <div id="m-providers" class="stream-providers"></div>
+        
+        <div id="m-meta" class="meta-tags"></div>
+
+        <p id="m-desc" class="description-text"></p>
+        <button id="m-desc-btn" class="read-more-btn">Read More v</button>
+
+        <div class="data-grid">
+           <div class="data-item"><span class="label">Release</span><span class="value" id="m-release"></span></div>
+           <div class="data-item"><span class="label">Runtime</span><span class="value" id="m-runtime"></span></div>
+        </div>
+        <div class="cast-section">
+            <h3>Top Cast</h3>
+            <div id="m-cast" class="cast-rail"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="actorModal" class="modal" onclick="closeModal(event, 'actorModal')">
+    <div class="modal-content" style="padding: 2.5rem;">
+      <button class="close-btn" onclick="document.getElementById('actorModal').style.display='none'">
+        <i class="ri-close-line"></i>
+      </button>
+      
+      <div class="actor-header" style="padding-top: 0;">
+        <img id="a-img" class="actor-pic" src="" alt="Actor Profile">
+        <div style="flex: 1;">
+          <h2 id="a-name" style="font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--accent);"></h2>
+          
+          <div id="a-meta" class="meta-tags"></div>
+          
+          <p id="a-bio" class="description-text"></p>
+          <button id="a-bio-btn" class="read-more-btn">Read More v</button>
+        </div>
+      </div>
+
+      <h3 style="margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);">Filmography</h3>
+      
+      <div id="a-films" class="film-grid"></div>
+    </div>
+  </div>
+
+  <div id="sharedMixtapeModal" class="modal" style="align-items: center; justify-content: center; z-index: 5000;">
+    <div class="modal-content" style="max-width: 600px; padding: 2rem; text-align: center; border: 2px solid var(--accent);">
+      <button class="close-btn" onclick="document.getElementById('sharedMixtapeModal').style.display='none'"><i class="ri-close-line"></i></button>
+      <h2 style="color: var(--accent); margin-bottom: 1rem;"><i class="ri-disc-line"></i> A Mixtape was shared with you!</h2>
+      <div id="shared-mixtape-grid" class="horizontal-scroll-grid" style="margin-top: 1.5rem; justify-content: center;"></div>
+      <button class="btn-primary" onclick="document.getElementById('sharedMixtapeModal').style.display='none'" style="margin: 1.5rem auto 0;">Awesome!</button>
+    </div>
+  </div>
+
+  <div id="bookingModal" class="modal" onclick="closeModal(event, 'bookingModal')">
+    <div class="modal-content booking-content">
+      <button class="close-btn" onclick="document.getElementById('bookingModal').style.display='none'"><i class="ri-close-line"></i></button>
+      <div id="booking-selection-view">
+          <div class="booking-header">
+            <h2 id="b-title">Movie Title</h2><p>Today • IMAX 3D</p>
+            <div class="banana-wallet">Wallet: <strong id="wallet-balance">1000</strong> 🍌</div>
+          </div>
+          <div class="screen-container"><div class="screen"></div><p>SCREEN</p></div>
+          <div class="seats-container" id="seats-grid"></div>
+          <div class="booking-footer">
+            <div class="total-price"><span>Total Cost:</span><strong id="total-price">0 🍌</strong></div>
+            <button class="btn-primary" onclick="confirmBooking()">Book Now</button>
+          </div>
+      </div>
+      <div id="booking-ticket-view" style="display:none;">
+          <div class="digital-ticket">
+              <div class="ticket-header"><h3>🎟️ ADMIT ONE</h3><h2 id="t-movie-title">Movie Title</h2></div>
+              <div class="ticket-body">
+                  <p><strong>Date:</strong> <span id="t-date">Today</span></p><p><strong>Time:</strong> 7:30 PM</p>
+                  <p><strong>Seats:</strong> <span id="t-seats">A1</span></p><p><strong>Paid:</strong> <span id="t-paid">500 🍌</span></p>
+              </div>
+              <div class="ticket-barcode">|||||| |||| | |||||| |||| ||</div>
+          </div>
+          <button class="btn-primary" onclick="document.getElementById('bookingModal').style.display='none'" style="margin: 1.5rem auto 0;">Close Ticket</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="rouletteModal" class="modal" style="align-items: center; justify-content: center;">
+    <div class="modal-content roulette-content">
+      <button class="close-btn" onclick="document.getElementById('rouletteModal').style.display='none'"><i class="ri-close-line"></i></button>
+      <h2>🎡 Movie Roulette</h2>
+      <p>Can't decide? Let fate choose.</p>
+      <div class="roulette-window">
+        <img id="roulette-poster" src="https://via.placeholder.com/300x450?text=Ready?" alt="Spinning...">
+      </div>
+      <h3 id="roulette-title" style="margin: 1rem 0; height: 30px;"></h3>
+      <button class="btn-primary" id="spin-btn" onclick="spinRoulette()" style="width:100%; justify-content:center; font-size:1.2rem;">SPIN THE WHEEL</button>
+      <button class="btn-secondary" id="roulette-watch-btn" style="display:none; width:100%; justify-content:center; margin-top:1rem;" onclick="openRouletteWinner()">Watch Details</button>
+    </div>
+  </div>
+
+  <div id="emojiModal" class="modal" style="align-items: center; justify-content: center;">
+    <div class="modal-content emoji-content">
+      <button class="close-btn" onclick="document.getElementById('emojiModal').style.display='none'"><i class="ri-close-line"></i></button>
+      <div class="emoji-header">
+        <h2>🧩 Emoji Decoder</h2>
+        <div class="score-badge">Score: <span id="emoji-score">0</span></div>
+      </div>
+      <div id="emoji-game-box">
+        <p class="emoji-display" id="e-question">🚢 🧊 🚪 🥶</p>
+        <div class="trivia-options" id="e-options"></div>
+      </div>
+      <div id="emoji-result" style="display:none; text-align:center;">
+        <h3 id="e-result-msg"></h3>
+        <button class="btn-primary" onclick="nextEmojiQuestion()" style="margin:1rem auto 0;">Next Puzzle</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="triviaModal" class="modal" style="align-items: center; justify-content: center;">
+    <div class="modal-content trivia-content">
+      <button class="close-btn" onclick="document.getElementById('emojiModal').style.display='none'"><i class="ri-close-line"></i></button>
+      <div class="trivia-header"><h2>🎬 Cine-Trivia</h2><div class="score-badge">Score: <span id="trivia-score">0</span></div></div>
+      <div id="trivia-question-box"><p class="trivia-question" id="t-question">Loading...</p><div class="trivia-options" id="t-options"></div></div>
+      <div id="trivia-result" style="display:none; text-align:center;"><h3 id="t-result-msg"></h3><button class="btn-primary" onclick="nextQuestion()" style="margin:1rem auto 0;">Next Question</button></div>
+    </div>
+  </div>
+    <div id="six-degrees-hud" style="display:none; position:fixed; top:80px; left:50%; transform:translateX(-50%); background:var(--accent); color:white; padding:0.8rem 1.5rem; border-radius:50px; z-index:9999; font-weight:bold; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
+      Target: <span id="sd-target">Morgan Freeman</span> | Clicks: <span id="sd-clicks">0</span>
+      <button onclick="stopSixDegrees()" style="background:none; border:none; color:white; margin-left:10px; cursor:pointer; font-weight:bold;">[X]</button>
+  </div>
+
+  <div id="frameModal" class="modal" style="align-items: center; justify-content: center;">
+    <div class="modal-content" style="max-width: 600px; text-align: center; padding: 2rem; border: 2px solid #14b8a6; background: #1a1a1a;">
+      <button class="close-btn" onclick="document.getElementById('frameModal').style.display='none'"><i class="ri-close-line"></i></button>
+      <h2 style="color: #14b8a6; margin-bottom: 1rem;"><i class="ri-image-edit-line"></i> Frame by Frame</h2>
+      <p style="margin-bottom: 1rem; color: var(--text-muted);">Guess the movie before the image clears!</p>
+      
+      <div style="width: 100%; height: 250px; border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem; position: relative;">
+          <img id="frame-image" src="" style="width: 100%; height: 100%; object-fit: cover; filter: blur(30px); transition: filter 5s linear;">
+      </div>
+      
+      <div id="frame-options" class="trivia-options"></div>
+      <div id="frame-result" style="display:none; margin-top: 1rem;"><h3 id="f-result-msg"></h3><button class="btn-primary" onclick="nextFrame()" style="margin:1rem auto 0;">Next Frame</button></div>
+    </div>
+  </div>
+
+
+<div id="wrappedModal"
+
+class="modal" style="align-items: center; justify-content: center; z-index: 4000;">
+
+<div class="modal-content wrapped-content">
+
+<button class="close-btn"
+
+onclick="document.getElement Byld('wrappedModal').style.di splay='none'" style="backgrou nd:rgba(255,255,255,0.3);"><i class="ri-close-line"></i></button>
+
+<div class="wrapped-story">
+
+<h4
+
+style="text-transform:uppercase; letter-spacing:3px; opacity:0.8; margin-bottom:1rem;">Your Year in Review</h4>
+
+<h1 id="w-title">The Movie Buff</h1>
+
+<div class="w-stats">
+
+<div class="w-stat-item">
+
+<span class="w-num"
+
+id="w-hours">O</span>
+
+<spanclass="w-label">Hours Watched</
+
+span>
+
+</div>
+
+<div class="w-stat-item">
+
+<span class="w-num"
+
+id="w-movies">O</span>
+
+<span
+
+class="w-label">Movies
+
+Explored</span>
+
+</div>
+
+</div>
+
+<p id="w-fun-fact"
+
+style="font-size:1.2rem;
+
+font-style:italic; margin-top:
+
+2rem;"></p>
+
+<button class="btn-primary"
+
+style="background:#fff;
+
+color:#000; margin-top:3rem;"
+
+onclick="alert('Screenshot this
+
+to share on your story!')"><i
+
+class="ri-camera-lens-line"></i>
+
+Screenshot & Share</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
