@@ -258,34 +258,7 @@ document.addEventListener("DOMContentLoaded", function () {
     </div>
   </div>
 
-  <div id="bookingModal" class="modal" onclick="closeModal(event, 'bookingModal')">
-    <div class="modal-content booking-content">
-      <button class="close-btn" onclick="document.getElementById('bookingModal').style.display='none'"><i class="ri-close-line"></i></button>
-      <div id="booking-selection-view">
-          <div class="booking-header">
-            <h2 id="b-title">Movie Title</h2><p>Today • IMAX 3D</p>
-            <div class="banana-wallet">Wallet: <strong id="wallet-balance">1000</strong> 🍌</div>
-          </div>
-          <div class="screen-container"><div class="screen"></div><p>SCREEN</p></div>
-          <div class="seats-container" id="seats-grid"></div>
-          <div class="booking-footer">
-            <div class="total-price"><span>Total Cost:</span><strong id="total-price">0 🍌</strong></div>
-            <button class="btn-primary" onclick="confirmBooking()">Book Now</button>
-          </div>
-      </div>
-      <div id="booking-ticket-view" style="display:none;">
-          <div class="digital-ticket">
-              <div class="ticket-header"><h3>🎟️ ADMIT ONE</h3><h2 id="t-movie-title">Movie Title</h2></div>
-              <div class="ticket-body">
-                  <p><strong>Date:</strong> <span id="t-date">Today</span></p><p><strong>Time:</strong> 7:30 PM</p>
-                  <p><strong>Seats:</strong> <span id="t-seats">A1</span></p><p><strong>Paid:</strong> <span id="t-paid">500 🍌</span></p>
-              </div>
-              <div class="ticket-barcode">|||||| |||| | |||||| |||| ||</div>
-          </div>
-          <button class="btn-primary" onclick="document.getElementById('bookingModal').style.display='none'" style="margin: 1.5rem auto 0;">Close Ticket</button>
-      </div>
-    </div>
-  </div>
+  
 
   <div id="rouletteModal" class="modal" style="align-items: center; justify-content: center;">
     <div class="modal-content roulette-content">
@@ -303,7 +276,36 @@ document.addEventListener("DOMContentLoaded", function () {
 
   <div id="emojiModal" class="modal" style="align-items: center; justify-content: center;">
     <div class="modal-content emoji-content">
-      <button class="close-btn" onclick="document.getElementById('emojiModal').style.display='none'"><i class="ri-close-line"></i></button>
+      <button class="close-btn" onclick="document.getElementById('emojiModal').style.display='no<div id="bookingModal" class="modal" onclick="closeModal(event, 'bookingModal')">
+  <div class="modal-content booking-content">
+    <button class="close-btn" onclick="document.getElementById('bookingModal').style.display='none'"><i class="ri-close-line"></i></button>
+    <div id="booking-selection-view">
+        <div class="booking-header">
+          <h2 id="b-title">Movie Title</h2><p>Virtual Cinema Game</p>
+          <div class="banana-stash-container">Banana Stash: <strong id="banana-stash">1000</strong> 🍌</div>
+        </div>
+        <div class="screen-container"><div class="screen"></div><p>SCREEN</p></div>
+        <div class="seats-container" id="seats-grid"></div>
+        <div class="booking-footer">
+          <div class="points-needed-container"><span>Points Needed:</span><strong id="total-points">0 🍌</strong></div>
+          <button class="btn-primary" onclick="confirmBooking()">Unlock Seats</button>
+        </div>
+    </div>
+    <div id="booking-ticket-view" style="display:none;">
+        <div class="digital-ticket">
+            <div class="ticket-header"><h3>🎮 VIRTUAL PASS</h3><h2 id="t-movie-title">Movie Title</h2></div>
+            <div class="ticket-body">
+                <p><strong>Date:</strong> <span id="t-date">Today</span></p><p><strong>Status:</strong> Unlocked</p>
+                <p><strong>Seats:</strong> <span id="t-seats">A1</span></p>
+                <p><strong>Points Used:</strong> <span id="t-points-used">500 🍌</span></p>
+            </div>
+            <div class="ticket-barcode">|||||| |||| | |||||| |||| ||</div>
+        </div>
+        <button class="btn-primary" onclick="document.getElementById('bookingModal').style.display='none'" style="margin: 1.5rem auto 0;">Close Pass</button>
+    </div>
+  </div>
+</div>
+    ne'"><i class="ri-close-line"></i></button>
       <div class="emoji-header">
         <h2>🧩 Emoji Decoder</h2>
         <div class="score-badge">Score: <span id="emoji-score">0</span></div>
