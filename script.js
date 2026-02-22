@@ -841,18 +841,7 @@ function addToMixtapeCurrent() {
     const listChoices = state.mixtapes.map((t, i) => `${i + 1}. ${t.name}`).join('\n');
     const choice = prompt(`Add '${state.activeMovie.title}' to which list (1-${state.mixtapes.length})?\n` + listChoices);
     
-    const idx = parseInt(choice) - 1;
-    if(state.mixtapes[idx]) { 
-        state.mixtapes[idx].movies.push({id: state.activeMovie.id, title: state.activeMovie.title}); 
-        localStorage.setItem('athul_mixtapes', JSON.stringify(state.mixtapes)); 
-        alert("Added to playlist!"); 
-    }
-}
-// ==========================================
-// 7. INTERACTIVE MINI-GAMES & FEATURES
-// ==========================================
-
-// --- FUNNY BOOKING & BANANA WALLET ---
+    const idx = parseInt(choi// --- FUNNY SEAT GAME & BANANA STASH ---
 function getBananaBalance() {
     const today = new Date().toDateString();
     let lastDate = localStorage.getItem('athul_banana_date');
@@ -877,8 +866,10 @@ function openBookingModal() {
     selectedSeats = []; 
     
     document.getElementById('b-title').innerText = state.activeMovie.title;
-    document.getElementById('wallet-balance').innerText = getBananaBalance();
-    updatePrice();
+    
+    // UPDATED ID: from wallet-balance to banana-stash
+    document.getElementById('banana-stash').innerText = getBananaBalance();
+    updatePoints(); // UPDATED function call
 
     // Generate 48 random seats
     for(let i=0; i<48; i++) {
@@ -896,30 +887,34 @@ function openBookingModal() {
                 s.classList.toggle('selected'); 
                 if(s.classList.contains('selected')) selectedSeats.push(i); 
                 else selectedSeats.splice(selectedSeats.indexOf(i), 1); 
-                updatePrice(); 
+                updatePoints(); // UPDATED function call
             } 
         }
         grid.appendChild(s);
     }
 }
 
-function updatePrice() { 
-    document.getElementById('total-price').innerText = `${selectedSeats.length * TICKET_PRICE} 🍌`; 
+// UPDATED function name: from updatePrice to updatePoints
+function updatePoints() { 
+    // UPDATED ID: from total-price to total-points
+    document.getElementById('total-points').innerText = `${selectedSeats.length * TICKET_PRICE} 🍌`; 
 }
 
 function confirmBooking() {
     if(!selectedSeats.length) return alert("Pick a seat! Are you going to sit on the floor?");
     
-    const cost = selectedSeats.length * TICKET_PRICE;
+    // UPDATED variable name: from cost to pointsNeeded
+    const pointsNeeded = selectedSeats.length * TICKET_PRICE;
     let balance = getBananaBalance();
 
-    if (cost > balance) {
-        alert(`Failed: You need ${cost} 🍌, but you only have ${balance} 🍌 left today! Come back tomorrow.`);
+    if (pointsNeeded > balance) {
+        // UPDATED: Removed "Payment Failed"
+        alert(`Not enough bananas! You need ${pointsNeeded} 🍌 to unlock these seats, but you only have ${balance} 🍌 left today! Come back tomorrow.`);
         return;
     }
 
     // Deduct Bananas
-    balance -= cost;
+    balance -= pointsNeeded;
     localStorage.setItem('athul_banana_balance', balance);
     
     // Switch to Digital Ticket View
@@ -937,44 +932,22 @@ function confirmBooking() {
     }).join(', ');
     
     document.getElementById('t-seats').innerText = seatNames;
-    document.getElementById('t-paid').innerText = `${cost} 🍌`;
-}
-
-// --- SWIPE MODE (TINDER FOR MOVIES) ---
-function initSwipeMode() {
-    fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}&page=${Math.floor(Math.random()*10)+1}`)
-        .then(r => r.json())
-        .then(d => { swipeMovies = d.results; renderSwipe(); });
-}
-
-function renderSwipe() {
-    const c = document.getElementById('swipe-card-container');
-    if(!swipeMovies.length) { initSwipeMode(); return; }
     
-    const m = swipeMovies[0];
-    c.innerHTML = `
-        <div class="swipe-card" style="background-image:url(https://image.tmdb.org/t/p/w500${m.poster_path})">
-            <div class="swipe-info">
-                <h2>${m.title}</h2>
-                <p>⭐ ${m.vote_average}</p>
-            </div>
-        </div>`;
-}
-
-function handleSwipe(dir) {
-    const card = document.querySelector('.swipe-card');
-    card.style.transform = `translateX(${dir==='left'?'-200%':'200%'}) rotate(${dir==='left'?'-20deg':'20deg'})`;
-    
-    if(dir === 'right') { 
-        state.activeMovie = swipeMovies[0]; 
-        toggleFav(); 
+    // UPDATED ID: from t-paid to t-points-used
+    document.getElementById('t-points-used').innerText = `${pointsNeeded} 🍌`;
+      }
+                                        ce) - 1;
+    if(state.mixtapes[idx]) { 
+        state.mixtapes[idx].movies.push({id: state.activeMovie.id, title: state.activeMovie.title}); 
+        localStorage.setItem('athul_mixtapes', JSON.stringify(state.mixtapes)); 
+        alert("Added to playlist!"); 
     }
-    
-    setTimeout(() => { 
-        swipeMovies.shift(); 
-        renderSwipe(); 
-    }, 300);
 }
+// ==========================================
+// 7. INTERACTIVE MINI-GAMES & FEATURES
+// ==========================================
+
+
 
 // --- COMPARE MODE ---
 async function addToCompare(id) {
