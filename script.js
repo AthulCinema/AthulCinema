@@ -914,7 +914,7 @@ function confirmBooking() {
     let balance = getBananaBalance();
 
     if (cost > balance) {
-        alert(`Payment Failed: You need ${cost} 🍌, but you only have ${balance} 🍌 left today! Come back tomorrow.`);
+        alert(`Failed: You need ${cost} 🍌, but you only have ${balance} 🍌 left today! Come back tomorrow.`);
         return;
     }
 
